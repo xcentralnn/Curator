@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-curator-bg: var(--color-bg);
+  --color-curator-card: var(--color-card);
+  --color-curator-border: var(--color-border);
+  --color-curator-accent: var(--color-accent);
+  --color-curator-accent-glow: var(--color-accent-glow);
+  --color-curator-panic: var(--color-panic);
+}
+
+@layer base {
+  :root {
+    --color-bg: #f9fafb;
+    --color-card: #ffffff;
+    --color-border: #e5e7eb;
+    --color-accent: #3498db;
+    --color-accent-glow: #2980b9;
+    --color-panic: #E74C3C;
+    --grid-color: rgba(52, 152, 219, 0.1);
+  }
+
+  .dark {
+    --color-bg: #0C0C0E;
+    --color-card: #141417;
+    --color-border: #242429;
+    --color-accent: #3498db;
+    --color-accent-glow: #2980b9;
+    --color-panic: #E74C3C;
+    --grid-color: rgba(52, 152, 219, 0.03);
+  }
+
+  body {
+    @apply bg-curator-bg dark:text-gray-200 text-gray-800 font-sans antialiased selection:bg-curator-accent/30;
+  }
+}
+
+.technical-grid {
+  background-size: 60px 60px;
+  background-image: 
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+}
+
+

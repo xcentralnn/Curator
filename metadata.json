@@ -1,0 +1,6 @@
+{
+  "name": "Curator",
+  "description": "AI-Powered Kubernetes Autoscaling and Management Dashboard",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
