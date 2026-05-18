@@ -1,4 +1,4 @@
-import { LayoutDashboard, Activity, Database, History, Settings, ShieldAlert, Coffee, PlusCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Activity, Database, History, Settings, ShieldAlert, Coffee, PlusCircle, ChevronLeft, ChevronRight, Hexagon, Box, Shield, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { cn } from "../lib/utils";
 import { CuratorLogo } from "./VisualBrand";
@@ -13,6 +13,7 @@ interface SidebarProps {
 
 export function Sidebar({ activePage, setActivePage, className, onClose }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isProductsCollapsed, setIsProductsCollapsed] = useState(true);
   const { addMessage } = useAdvisor();
 
   const menuItems = [
@@ -21,6 +22,12 @@ export function Sidebar({ activePage, setActivePage, className, onClose }: Sideb
     { id: "create-scaler", label: "Create Scaler", icon: PlusCircle },
     { id: "analytics", label: "ML Analytics", icon: Activity },
     { id: "logs", label: "Recommendation Logs", icon: History },
+  ];
+
+  const productItems = [
+    { id: "observability", label: "Curator Scaler Observability", icon: Hexagon, color: "text-purple-500 dark:text-purple-400" },
+    { id: "deployment", label: "Curator Scaler Deployment", icon: Box, color: "text-emerald-500 dark:text-emerald-400" },
+    { id: "security", label: "Curator Scaler Security", icon: Shield, color: "text-amber-500 dark:text-amber-400" },
   ];
 
   const handleMenuClick = (id: string, label: string) => {
@@ -36,7 +43,7 @@ export function Sidebar({ activePage, setActivePage, className, onClose }: Sideb
 
   return (
     <div className={cn("h-full border-r dark:border-curator-border border-gray-200 dark:bg-curator-card bg-white flex flex-col p-4 relative overflow-hidden shrink-0 transition-all duration-300", 
-      isCollapsed ? "w-20" : "w-64 md:w-68", 
+      isCollapsed ? "w-20" : "w-72 md:w-80", 
       className)}>
       {/* Background soft glow */}
       <div className="absolute -top-20 -left-20 w-40 h-40 bg-curator-accent/5 blur-[80px] rounded-full pointer-events-none" />
@@ -46,7 +53,12 @@ export function Sidebar({ activePage, setActivePage, className, onClose }: Sideb
           <div className="w-10 h-10 transition-transform duration-300 flex-shrink-0 cursor-pointer" onClick={() => isCollapsed && setIsCollapsed(false)}>
             <CuratorLogo />
           </div>
-          {!isCollapsed && <h1 className="text-xl font-black tracking-tighter dark:text-white text-gray-900 transition-colors">CURATOR</h1>}
+          {!isCollapsed && (
+            <div className="flex flex-col">
+              <h1 className="text-xl font-black tracking-tighter dark:text-white text-gray-900 transition-colors leading-none whitespace-nowrap">CURATOR SCALER</h1>
+              <span className="text-[9px] font-bold tracking-widest text-gray-400 dark:text-gray-500 mt-1 uppercase">Software</span>
+            </div>
+          )}
         </div>
         
         {!isCollapsed && (
@@ -76,28 +88,70 @@ export function Sidebar({ activePage, setActivePage, className, onClose }: Sideb
         )}
       </div>
 
-      <nav className="flex-1 space-y-2">
-        {menuItems.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => handleMenuClick(item.id, item.label)}
-            title={isCollapsed ? item.label : undefined}
-            className={cn(
-              "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 group border",
-              isCollapsed ? "justify-center" : "",
-              activePage === item.id 
-                ? "bg-curator-accent/10 dark:text-white text-gray-900 border-curator-accent/20 shadow-[0_0_15px_rgba(52,152,219,0.15)]" 
-                : "border-transparent dark:text-gray-400 text-gray-500 dark:hover:text-white hover:text-gray-900 dark:hover:bg-white/5 hover:bg-gray-50 dark:hover:border-white/10 hover:border-gray-200 hover:-translate-y-0.5"
-            )}
-          >
-            <item.icon className={cn("w-5 h-5 flex-shrink-0", activePage === item.id ? "text-curator-accent" : "dark:text-gray-500 text-gray-400 dark:group-hover:text-gray-300 group-hover:text-gray-900")} />
-            {!isCollapsed && <span>{item.label}</span>}
-            {!isCollapsed && activePage === item.id && (
-              <div className="ml-auto w-1 h-1 rounded-full bg-curator-accent" />
-            )}
-          </button>
-        ))}
-      </nav>
+      <div className="flex-1 overflow-y-auto pr-1 -mr-1 space-y-6">
+        <div>
+          {!isCollapsed && (
+            <div className="px-3 mb-2">
+              <p className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap">CURATOR SCALER</p>
+            </div>
+          )}
+          <nav className="space-y-1">
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleMenuClick(item.id, item.label)}
+                title={isCollapsed ? item.label : undefined}
+                className={cn(
+                  "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 group border",
+                  isCollapsed ? "justify-center" : "",
+                  activePage === item.id 
+                    ? "bg-curator-accent/10 dark:text-white text-gray-900 border-curator-accent/20 shadow-[0_0_15px_rgba(52,152,219,0.15)]" 
+                    : "border-transparent dark:text-gray-400 text-gray-500 dark:hover:text-white hover:text-gray-900 dark:hover:bg-white/5 hover:bg-gray-50 dark:hover:border-white/10 hover:border-gray-200 hover:-translate-y-0.5"
+                )}
+              >
+                <item.icon className={cn("w-5 h-5 flex-shrink-0", activePage === item.id ? "text-curator-accent" : "dark:text-gray-500 text-gray-400 dark:group-hover:text-gray-300 group-hover:text-gray-900")} />
+                {!isCollapsed && <span>{item.label}</span>}
+                {!isCollapsed && activePage === item.id && (
+                  <div className="ml-auto w-1 h-1 rounded-full bg-curator-accent" />
+                )}
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        <div>
+          {!isCollapsed ? (
+            <button
+              onClick={() => setIsProductsCollapsed(!isProductsCollapsed)}
+              className="w-full flex items-center justify-between px-3 mb-2 group transition-colors focus:outline-none"
+            >
+              <p className="text-[10px] font-bold text-gray-500 dark:text-gray-500/80 uppercase tracking-widest group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors whitespace-nowrap truncate mr-2">
+                [CURATOR SCALER SYSTEM PRODUCTS]
+              </p>
+              <ChevronDown className={cn("w-3.5 h-3.5 text-gray-400 transition-transform duration-300 shrink-0", isProductsCollapsed && "-rotate-90")} />
+            </button>
+          ) : (
+            <div className="flex justify-center mb-2" title="System Products">
+               <div className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-600" />
+            </div>
+          )}
+
+          {(!isCollapsed && !isProductsCollapsed) && (
+            <div className="space-y-0.5 mt-2">
+              {productItems.map((item) => (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-300 group border border-transparent dark:text-gray-500 text-gray-500 dark:hover:text-gray-300 hover:text-gray-800 dark:hover:bg-white/5 hover:bg-gray-50 hover:-translate-y-0.5"
+                >
+                  <item.icon className={cn("w-4 h-4 flex-shrink-0 opacity-80", item.color)} />
+                  <span className="truncate">{item.label}</span>
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Mascot Insight Widget */}
       <div className={cn("mt-auto mb-6 p-4 rounded-xl border dark:border-white/5 border-gray-100 relative group transition-all duration-300", 

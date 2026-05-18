@@ -17,7 +17,7 @@ export function FloatingMascot() {
         "Welcome back! I'm monitoring the cluster.",
         "All systems are running smoothly right now.",
         "Need to scale up? Just let me know!",
-        "Curator ML Engine is online and vigilant.",
+        "Curator Scaler ML Engine is online and vigilant.",
         "Analyzing real-time metrics... looks good!"
       ];
       const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
@@ -98,7 +98,7 @@ export function FloatingMascot() {
         transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.5 }}
       >
         <motion.div 
-           className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 relative z-20"
+           className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 relative z-20"
            animate={
              isActive 
                ? { y: 0, scale: 1 } 
@@ -149,7 +149,7 @@ export function FloatingMascot() {
                </svg>
             </div>
 
-            <span className="font-bold text-[10px] text-gray-900 dark:text-white tracking-widest uppercase">Curator</span>
+            <span className="font-bold text-[10px] text-gray-900 dark:text-white tracking-widest uppercase whitespace-nowrap">Curator Scaler</span>
           </div>
 
           {/* Glow effect when active */}

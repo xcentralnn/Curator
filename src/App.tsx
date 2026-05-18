@@ -55,7 +55,7 @@ export default function App() {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", bounce: 0, duration: 0.3 }}
-              className="absolute inset-y-0 left-0 w-64 shadow-2xl z-50 flex flex-col"
+              className="absolute inset-y-0 left-0 w-72 shadow-2xl z-50 flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               <Sidebar 
@@ -113,7 +113,7 @@ export default function App() {
                 
                 <div className="flex-col hidden lg:flex">
                   <span className="text-sm font-bold dark:text-gray-300 text-gray-700 dark:group-hover:text-white group-hover:text-gray-900 transition-colors leading-none truncate max-w-[120px]">{user.displayName || user.email?.split('@')[0]}</span>
-                  <span className="text-[10px] dark:text-gray-600 text-gray-500 font-mono">Curator Operator</span>
+                  <span className="text-[10px] dark:text-gray-600 text-gray-500 font-mono">Curator Scaler Operator</span>
                 </div>
 
                 <div className="absolute right-0 top-full mt-2 w-48 dark:bg-curator-card bg-white border dark:border-curator-border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all pointer-events-none group-hover:pointer-events-auto p-2">
@@ -196,7 +196,7 @@ function LogsPage() {
             Recommendation Logs
           </h2>
           <p className="dark:text-gray-500 text-gray-400 font-mono text-[10px] md:text-xs uppercase tracking-widest italic">
-            Source: Curator-ML-Engine / Event History
+            Source: Curator-Scaler-ML-Engine / Event History
           </p>
         </div>
         <div className="flex gap-2">

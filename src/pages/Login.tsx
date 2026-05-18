@@ -22,7 +22,7 @@ export function Login() {
         </div>
         
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-black tracking-tighter mb-2">CURATOR</h1>
+          <h1 className="text-3xl font-black tracking-tighter mb-2">CURATOR SCALER</h1>
           <p className="dark:text-gray-400 text-gray-500 font-mono text-sm uppercase tracking-widest">K8s AI Operator Panel</p>
         </div>
 

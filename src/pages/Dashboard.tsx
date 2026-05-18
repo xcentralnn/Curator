@@ -164,7 +164,7 @@ export function Dashboard() {
         <div className="lg:col-span-2 flex flex-col min-w-0">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4">
             <h3 className="font-mono text-xs font-bold dark:text-gray-400 text-gray-500 uppercase tracking-widest flex items-center gap-2">
-              <Server className="w-4 h-4 text-curator-accent shrink-0" /> Active CuratorScalers
+              <Server className="w-4 h-4 text-curator-accent shrink-0" /> Active Curator Scalers
             </h3>
             <span className="text-[10px] font-mono dark:text-gray-600 text-gray-500 italic">Connected to ML-Engine</span>
           </div>
@@ -183,7 +183,7 @@ export function Dashboard() {
               <div>
                 <h4 className="text-sm md:text-md font-bold dark:text-white text-gray-900 mb-2 flex items-center justify-center sm:justify-start gap-2">
                   <Zap className="w-4 h-4 text-yellow-500 fill-yellow-500 shrink-0" />
-                  Curator Intelligence Online
+                  Curator Scaler Intelligence Online
                 </h4>
                 <p className="text-xs md:text-sm dark:text-gray-400 text-gray-600 max-w-md leading-relaxed">
                   ML Engine is processing time-series data. No anomalies detected. 
