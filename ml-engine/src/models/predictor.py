@@ -1,123 +1,88 @@
-import logging
-import requests
-import datetime
+import time
+import os
 import math
-from typing import Tuple
+import random
+import numpy as np
+from prometheus_api_client import PrometheusConnect
 
-logger = logging.getLogger("ml-engine.predictor")
+from typing import Tuple, Optional, Any
 
-PROMETHEUS_URL = "http://prometheus-k8s.monitoring.svc.cluster.local:9090"
-
-def fetch_prometheus_data(query: str, days: int = 30) -> list:
+def calculate_threshold(query: str, server_address: str, target_namespace: str = "", ml_config: Optional[Any] = None) -> Tuple[float, bool]:
     """
-    Fetch historical metric data from Prometheus via HTTP API.
-    Uses a range query over the specified number of days with a 1-hour step.
+    Connects to Prometheus, fetches historical data, or generates mock data if DEV_MODE is true.
+    Returns (predicted_threshold, anomaly_detected).
     """
-    end_time = datetime.datetime.utcnow()
-    start_time = end_time - datetime.timedelta(days=days)
-    
-    # 1h step to avoid overwhelming the prometheus server over 30 days
-    step = "1h"
-    
-    url = f"{PROMETHEUS_URL}/api/v1/query_range"
-    params = {
-        "query": query,
-        "start": start_time.timestamp(),
-        "end": end_time.timestamp(),
-        "step": step
-    }
+    training_window_days = ml_config.trainingWindowDays if ml_config and hasattr(ml_config, 'trainingWindowDays') else 30
+    anomaly_sensitivity = getattr(ml_config.anomalyDetection, 'sensitivity', 1.15) if ml_config and hasattr(ml_config, 'anomalyDetection') else 1.15
     
     try:
-        response = requests.get(url, params=params, timeout=15)
-        response.raise_for_status()
-        data = response.json()
-        
-        if data.get("status") != "success":
-            raise ValueError(f"Prometheus query failed: {data.get('error')}")
+        anomaly_detected = False
+        if os.environ.get("DEV_MODE") == "true":
+            # Generate mock data (step=1h) based on trainingWindowDays
+            end_time = int(time.time())
+            start_time = end_time - (training_window_days * 24 * 60 * 60)
             
-        return data.get("data", {}).get("result", [])
-    except requests.RequestException as e:
-        logger.error(f"Failed to fetch data from Prometheus: {e}")
-        # Raising exception triggers the 500 error, activating Go K8s Operator fallback policy
-        raise RuntimeError(f"Prometheus connection error: {e}")
-
-def process_time_series(values: list) -> Tuple[float, float, float, bool]:
-    """
-    Processes the raw time series to calculate:
-    - Mean
-    - Standard Deviation 
-    - Exponential Moving Average (EMA) to capture recent trends / daily seasonality
-    - Anomaly Detection via 3-sigma rule
-    """
-    if not values:
-        return 0.0, 0.0, 0.0, False
-        
-    float_values = [float(v[1]) for v in values]
-    n = len(float_values)
-    
-    # Statistical Baseline
-    mean = sum(float_values) / n
-    variance = sum((x - mean) ** 2 for x in float_values) / n
-    std_dev = math.sqrt(variance)
-    
-    # Calculate simple EMA over the timeseries to emphasize recency
-    ema = float_values[0]
-    alpha = 0.2
-    for val in float_values[1:]:
-        ema = alpha * val + (1 - alpha) * ema
-        
-    # Anomaly detection (3-sigma rule) based on the latest value
-    latest_value = float_values[-1]
-    anomaly_detected = False
-    
-    # Check if the latest value spikes higher than 3 standard deviations from the mean
-    if std_dev > 0 and (latest_value - mean) > (3 * std_dev):
-        anomaly_detected = True
-        
-    return mean, std_dev, ema, anomaly_detected
-
-def predict_replicas(promql_query: str, metric_type: str, current_replicas: int) -> Tuple[int, float, bool]:
-    """
-    Core prediction logic.
-    Returns: (recommended_replicas, predicted_threshold, anomaly_detected)
-    """
-    logger.info(f"Fetching {metric_type} metric for 30 days using query: {promql_query}")
-    results = fetch_prometheus_data(promql_query, days=30)
-    
-    if not results:
-        logger.warning("No data returned from Prometheus. Keeping current replicas.")
-        return current_replicas, 0.0, False
-        
-    # Assume the query aggregates to a single series block
-    series = results[0]
-    values = series.get("values", [])
-    
-    if not values:
-        logger.warning("No data points in the timeseries. Keeping current replicas.")
-        return current_replicas, 0.0, False
-        
-    mean, std_dev, ema, anomaly_detected = process_time_series(values)
-    
-    # Our predicted threshold combines the EMA to track the current curve 
-    # plus 1 standard deviation for a buffer zone. 
-    predicted_threshold = ema + std_dev
-    
-    recommended_replicas = current_replicas
-    
-    if anomaly_detected:
-        logger.warning("Anomaly (Spike > 3-sigma) detected! Recommending significant scale-up to absorb shock.")
-        # E.g., For DDoS/spike scenarios, we multiply the current running workload by 1.5x instantly
-        recommended_replicas = max(int(current_replicas * 1.5), current_replicas + 1)
-    else:
-        # Standard intelligent scaling logic:
-        # If our predicted load requires more capacity, we scale up by 1.
-        if predicted_threshold > (mean * 1.15):
-            recommended_replicas += 1
-        # If our predicted load is significantly lower than average, cautiously scale down.
-        elif predicted_threshold < (mean * 0.85) and current_replicas > 1:
-            recommended_replicas -= 1
+            all_values = []
+            for ts in range(start_time, end_time + 1, 3600):
+                # Simulate daily seasonality: Peak at 14:00 (2 PM) local time roughly
+                hour_of_day = (ts // 3600) % 24
+                # shift peak to 14:00
+                shifted_hour = (hour_of_day - 14) % 24
+                # cosine goes from 1 at peak to -1 at trough (at 2 AM)
+                seasonality = (math.cos(shifted_hour * math.pi / 12) + 1) / 2
+                base_traffic = 50 + seasonality * 50
+                noise = random.uniform(-10, 10)
+                traffic = max(0, base_traffic + noise)
+                
+                # Check for DDoS attack in the last 15 minutes (or last 1 hour since step=1h)
+                if target_namespace == "auth-service" and (end_time - ts) <= 3600:
+                    anomaly_enabled = getattr(ml_config.anomalyDetection, 'enabled', True) if ml_config and hasattr(ml_config, 'anomalyDetection') else True
+                    if anomaly_enabled:
+                        traffic += random.uniform(500, 1000)
+                        anomaly_detected = True
+                    
+                all_values.append(traffic)
+        else:
+            prom = PrometheusConnect(url=server_address, disable_ssl=True)
             
-    logger.info(f"Analytics | Mean: {mean:.2f}, StdDev: {std_dev:.2f}, EMA: {ema:.2f}, Latest Val: {float(values[-1][1]):.2f}")
-    logger.info(f"Verdict | Replicas: {recommended_replicas}, PredictedThreshold: {predicted_threshold:.2f}, Anomaly: {anomaly_detected}")
-    
-    return recommended_replicas, predicted_threshold, anomaly_detected
+            # data in steps of 1 hour to prevent overwhelming the server
+            end_time = time.time()
+            start_time = end_time - (training_window_days * 24 * 60 * 60)
+            
+            # We query the prometheus range
+            metric_data = prom.custom_query_range(
+                query=query,
+                start_time=start_time,
+                end_time=end_time,
+                step="1h"
+            )
+            
+            if not metric_data:
+                raise ValueError(f"No data returned from Prometheus for the given query over the last {training_window_days} days.")
+                
+            all_values = []
+            for result in metric_data:
+                values = result.get('values', [])
+                for val in values:
+                    # val is [timestamp, value_string]
+                    all_values.append(float(val[1]))
+                    
+        if not all_values:
+            raise ValueError("No historical values found.")
+            
+        # Calculate the 95th percentile
+        p95 = np.percentile(all_values, 95)
+        
+        # Add safety buffer (sensitivity multiplier)
+        predicted_threshold = p95 * anomaly_sensitivity
+        
+        return round(predicted_threshold, 2), anomaly_detected
+        
+    except Exception as e:
+        if ml_config and hasattr(ml_config, 'accuracyBoundaries') and getattr(ml_config.accuracyBoundaries, 'fallbackOnFailure', False):
+            static_threshold = getattr(ml_config.accuracyBoundaries, 'staticFallbackThreshold', "0")
+            try:
+                return float(static_threshold), False
+            except ValueError:
+                pass
+        raise RuntimeError(f"Failed to calculate threshold from Prometheus: {e}")

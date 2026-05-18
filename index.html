@@ -5,6 +5,17 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Curator | K8s Autoscaling</title>
+    <script>
+      // Prevent "Cannot set property fetch of #<Window> which has only a getter" error
+      // caused by polyfills trying to overwrite window.fetch
+      const _fetch = window.fetch;
+      Object.defineProperty(window, 'fetch', {
+        configurable: true,
+        enumerable: true,
+        get: function() { return _fetch; },
+        set: function() { /* ignore */ }
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>

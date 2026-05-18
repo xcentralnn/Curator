@@ -4,12 +4,15 @@ import App from './App.tsx';
 import './index.css';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 import { ThemeProvider } from './contexts/ThemeContext.tsx';
+import { AdvisorProvider } from './contexts/AdvisorContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider>
       <ThemeProvider defaultTheme="dark">
-        <App />
+        <AdvisorProvider>
+          <App />
+        </AdvisorProvider>
       </ThemeProvider>
     </AuthProvider>
   </StrictMode>,

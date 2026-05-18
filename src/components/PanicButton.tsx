@@ -1,18 +1,22 @@
 import { useState } from "react";
-import { ShieldAlert, Terminal } from "lucide-react";
+import { Shield, Terminal } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "../lib/utils";
+import { useAdvisor } from "../contexts/AdvisorContext";
 
 export function PanicButton() {
   const [isConfirming, setIsConfirming] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const { addMessage } = useAdvisor();
 
   const handlePanic = async () => {
     setStatus("loading");
+    addMessage("INITIATING EMERGENCY MANUAL OVERRIDE... All scalers are being paused.", "warning");
     try {
       const response = await fetch("/api/panic", { method: "POST" });
       if (response.ok) {
         setStatus("success");
+        addMessage("OVERRIDE COMPLETE: All scalers successfully paused.", "error"); // using error style because it's a critical stop
         setTimeout(() => {
           setStatus("idle");
           setIsConfirming(false);
@@ -21,6 +25,7 @@ export function PanicButton() {
     } catch (error) {
       console.error("Panic failed", error);
       setStatus("idle");
+      addMessage("CRITICAL FAILURE: Could not connect to ML Engine to pause scalers.", "error");
     }
   };
 
@@ -30,7 +35,7 @@ export function PanicButton() {
         onClick={() => setIsConfirming(true)}
         className="flex items-center gap-2 px-4 py-2 bg-curator-panic hover:bg-red-600 text-white rounded-lg font-bold text-sm transition-all shadow-lg shadow-red-900/20 uppercase tracking-widest"
       >
-        <ShieldAlert className="w-4 h-4" />
+        <Shield className="w-4 h-4" />
         Panic Stop
       </button>
 

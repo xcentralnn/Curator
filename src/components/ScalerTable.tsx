@@ -1,4 +1,4 @@
-import { MoreVertical, ExternalLink } from "lucide-react";
+import { MoreVertical, ExternalLink, ShieldCheck, ArrowUpRight, AlertTriangle, PauseCircle, AlertCircle } from "lucide-react";
 import { cn } from "../lib/utils";
 
 interface Scaler {
@@ -11,6 +11,7 @@ interface Scaler {
   maxReplicas: number;
   lastScaled: string;
   strategy: string;
+  calculatedThreshold?: string;
 }
 
 interface ScalerTableProps {
@@ -29,6 +30,7 @@ export function ScalerTable({ scalers, onSelect }: ScalerTableProps) {
               <th className="px-6 py-4 text-[10px] font-mono font-bold dark:text-gray-500 text-gray-500 uppercase tracking-widest italic">Status</th>
               <th className="px-6 py-4 text-[10px] font-mono font-bold dark:text-gray-500 text-gray-500 uppercase tracking-widest italic text-center">Replicas (C/M/M)</th>
               <th className="px-6 py-4 text-[10px] font-mono font-bold dark:text-gray-500 text-gray-500 uppercase tracking-widest italic">Strategy</th>
+              <th className="px-6 py-4 text-[10px] font-mono font-bold dark:text-gray-500 text-gray-500 uppercase tracking-widest italic">AI Threshold</th>
               <th className="px-6 py-4 text-[10px] font-mono font-bold dark:text-gray-500 text-gray-500 uppercase tracking-widest italic">Last Update</th>
               <th className="px-6 py-4"></th>
             </tr>
@@ -48,21 +50,18 @@ export function ScalerTable({ scalers, onSelect }: ScalerTableProps) {
                 </td>
                 <td className="px-6 py-4">
                   <div className={cn(
-                    "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold font-mono uppercase",
+                    "inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-bold font-mono uppercase",
                     scaler.status === "Healthy" ? "bg-green-500/10 text-green-500" :
                     scaler.status === "Scaling" ? "bg-blue-500/10 text-blue-500" :
                     scaler.status === "Warning" ? "bg-yellow-500/10 text-yellow-500" :
                     scaler.status === "Paused" ? "bg-purple-500/10 text-purple-500" :
                     "bg-red-500/10 text-red-500"
                   )}>
-                    <div className={cn(
-                      "w-1.5 h-1.5 rounded-full",
-                      scaler.status === "Healthy" ? "bg-green-500" :
-                      scaler.status === "Scaling" ? "bg-blue-500 animate-pulse" :
-                      scaler.status === "Warning" ? "bg-yellow-500" :
-                      scaler.status === "Paused" ? "bg-purple-500" :
-                      "bg-red-500"
-                    )} />
+                    {scaler.status === "Healthy" && <ShieldCheck className="w-3 h-3" />}
+                    {scaler.status === "Scaling" && <ArrowUpRight className="w-3 h-3 animate-bounce" />}
+                    {scaler.status === "Warning" && <AlertTriangle className="w-3 h-3" />}
+                    {scaler.status === "Paused" && <PauseCircle className="w-3 h-3" />}
+                    {(!["Healthy", "Scaling", "Warning", "Paused"].includes(scaler.status)) && <AlertCircle className="w-3 h-3" />}
                     {scaler.status}
                   </div>
                 </td>
@@ -78,6 +77,16 @@ export function ScalerTable({ scalers, onSelect }: ScalerTableProps) {
                 <td className="px-6 py-4">
                   <span className="px-2 py-1 dark:bg-white/5 bg-gray-50 border dark:border-white/10 border-gray-200 rounded text-[10px] font-mono dark:text-gray-400 text-gray-600 uppercase tracking-tight">
                     {scaler.strategy}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span className={cn(
+                    "px-2 py-1 rounded text-[10px] font-mono uppercase tracking-tight border",
+                    scaler.calculatedThreshold 
+                      ? "dark:bg-curator-accent/20 bg-curator-accent/10 dark:text-curator-accent text-curator-accent border-curator-accent dark:border-curator-accent"
+                      : "dark:bg-white/5 bg-gray-50 dark:text-gray-500 text-gray-400 border-transparent dark:border-transparent"
+                  )}>
+                    {scaler.calculatedThreshold || "STATIC"}
                   </span>
                 </td>
                 <td className="px-6 py-4">

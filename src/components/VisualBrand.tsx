@@ -4,58 +4,51 @@
  */
 
 import { cn } from "../lib/utils";
+import { Hexagon, Asterisk } from "lucide-react";
 
 export function CuratorLogo({ className }: { className?: string }) {
   return (
-    <svg 
-      viewBox="0 0 100 100" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg" 
-      className={cn("w-full h-full", className)}
-    >
-      {/* Outer Glow / Base */}
-      <path 
-        d="M50 5L90 27.5V72.5L50 95L10 72.5V27.5L50 5Z" 
-        stroke="#3498db" 
-        strokeWidth="2" 
-        strokeOpacity="0.3"
-      />
-      
-      {/* Main Isometric Cube Shell */}
-      <path d="M50 15L80 32V68L50 85L20 68V32L50 15Z" fill="#3498db" fillOpacity="0.2" />
-      <path d="M50 15L80 32L50 49L20 32L50 15Z" fill="#3498db" fillOpacity="0.4" />
-      <path d="M50 49V85L80 68V32L50 49Z" fill="#3498db" fillOpacity="0.6" />
-      <path d="M20 32V68L50 85V49L20 32Z" fill="#3498db" fillOpacity="0.5" />
+    <div className={cn("w-full h-full min-w-8 min-h-8 rounded-xl bg-white dark:bg-[#1E293B] border border-gray-200 dark:border-slate-700 flex items-center justify-center shrink-0 drop-shadow-sm", className)}>
+      <svg viewBox="0 0 100 100" className="w-[85%] h-[85%] drop-shadow-md">
+        {/* Outer Hexagon outline with hollow space */}
+        {/* Left inner wall */}
+        <polygon points="50,4 10,27 10,73 50,50" fill="#58B3E6" />
+        {/* Right inner wall */}
+        <polygon points="50,4 90,27 90,73 50,50" fill="#3B87C1" />
+        {/* Bottom inner wall */}
+        <polygon points="10,73 50,96 90,73 50,50" fill="#2A648F" />
 
-      {/* Inner Core Cube (The "Entity") */}
-      <path d="M50 35L65 43.5V56.5L50 65L35 56.5V43.5L50 35Z" fill="white" fillOpacity="0.9" />
-      <path d="M50 35L65 43.5L50 52L35 43.5L50 35Z" fill="white" />
-      <path d="M50 52V65L65 56.5V43.5L50 52Z" fill="#E0F2FE" />
-      <path d="M35 43.5V56.5L50 65V52L35 43.5Z" fill="#BAE6FD" />
-      
-      {/* Detail accents */}
-      <path d="M50 15V49M80 32L50 49M20 32L50 49" stroke="#5AB0FF" strokeWidth="0.5" />
-    </svg>
+        {/* Inner floating White Cube to form the "Hollow Box" effect */}
+        {/* Top Face */}
+        <polygon points="50,25 70,36.5 50,48 30,36.5" fill="#FFFFFF" />
+        {/* Left Face */}
+        <polygon points="30,36.5 50,48 50,71.5 30,60" fill="#B7E2FA" />
+        {/* Right Face */}
+        <polygon points="50,48 70,36.5 70,60 50,71.5" fill="#82C2E8" />
+      </svg>
+    </div>
   );
 }
 
 export function MascotPlatypus({ className }: { className?: string }) {
   return (
-    <div className={cn("relative group", className)}>
-      {/* This is a symbolic representation of the mascot from the image */}
-      <div className="w-12 h-12 bg-[#8B4513] rounded-full border-2 border-curator-border flex items-center justify-center overflow-hidden relative shadow-lg">
-        {/* Simple Hat/Headphones shape */}
-        <div className="absolute top-0 w-full h-1/2 bg-[#333] opacity-80" />
-        {/* Face */}
-        <div className="absolute bottom-2 w-8 h-4 bg-[#D4A373] rounded-full" />
-        {/* Bill */}
-        <div className="absolute bottom-4 w-10 h-3 bg-[#2D2D2D] rounded-full" />
-      </div>
-      {/* Coffee Mug Floating */}
-      <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-sm border border-gray-300 shadow-sm flex flex-col items-center">
-        <div className="w-full h-1 bg-gray-100 mb-1" />
-        <div className="w-1 h-2 bg-gray-200 absolute -right-1 top-1 rounded-r-md" />
-      </div>
+    <div className={cn("relative shrink-0 flex items-center justify-center rounded-full bg-[#f6f5ec] dark:bg-[#242429] border-[3px] border-curator-accent dark:border-curator-accent shadow-[0_0_20px_rgba(52,152,219,0.5)] overflow-hidden transition-colors relative group", className || "w-16 h-16")}>
+      <div className="absolute inset-0 bg-gradient-to-b from-[#f6f5ec] to-[#f6f5ec] dark:from-[#242429] dark:to-[#242429]" />
+      <img 
+        src="https://raw.githubusercontent.com/xcentralnn/Curator-Draft/main/docs/curator-logo.png" 
+        alt="System Advisor Mascot" 
+        referrerPolicy="no-referrer"
+        className="absolute max-w-none transform transition-transform duration-500 group-hover:scale-105"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "center",
+          filter: "contrast(1.1) saturate(1.1)",
+          imageRendering: "-webkit-optimize-contrast"
+        }}
+      />
     </div>
   );
 }
+

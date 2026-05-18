@@ -23,6 +23,7 @@ let scalers = [
     maxReplicas: 10,
     lastScaled: new Date().toISOString(),
     strategy: "AI-Predictive",
+    calculatedThreshold: "250 Mbps",
   },
   {
     id: "auth-service-scaler",
@@ -34,6 +35,7 @@ let scalers = [
     maxReplicas: 8,
     lastScaled: new Date().toISOString(),
     strategy: "Proactive",
+    calculatedThreshold: "1200 req/s",
   },
   {
     id: "orders-db-scaler",
@@ -89,6 +91,25 @@ app.get("/api/metrics", (req, res) => {
     timestamp: new Date().toISOString(),
   }));
   res.json(metrics);
+});
+
+app.get("/api/prometheus/metrics", (req, res) => {
+  const data = [];
+  let now = new Date();
+  for (let i = 30; i >= 0; i--) {
+    let t = new Date(now.getTime() - i * 60000);
+    // Simulate real-looking waves using sine
+    const wave1 = Math.sin(i * 0.5) * 20;
+    const wave2 = Math.cos(i * 0.3) * 10;
+    
+    data.push({
+      time: t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      cpu: Math.floor(50 + wave1 + Math.random() * 10),
+      memory: Math.floor(60 + wave2 + Math.random() * 5),
+      bandwidth: Math.floor(120 + wave1 * 2 + Math.random() * 20),
+    });
+  }
+  res.json(data);
 });
 
 app.get("/api/recommendations", (req, res) => {
