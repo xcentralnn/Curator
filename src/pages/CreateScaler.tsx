@@ -50,7 +50,7 @@ export function CreateScaler({ onCreated }: CreateScalerProps) {
     // Construct the JSON payload for K8s API
     const payload = {
       apiVersion: "xcentralnn.io/v1alpha1",
-      kind: "CuratorScaler",
+      kind: "Curator-Scaler",
       metadata: {
         name: formData.name,
         namespace: formData.namespace,
@@ -115,7 +115,7 @@ export function CreateScaler({ onCreated }: CreateScalerProps) {
     setTimeout(() => {
       setIsSubmitting(false);
       setSuccess(true);
-      addMessage(`Successfully provisioned Curator Scaler: ${formData.name}`, 'success');
+      addMessage(`Successfully provisioned Curator-Scaler: ${formData.name}`, 'success');
       setTimeout(() => {
         setSuccess(false);
         if (onCreated) onCreated();
@@ -155,7 +155,7 @@ export function CreateScaler({ onCreated }: CreateScalerProps) {
   return (
     <div className="p-4 md:p-8 technical-grid min-h-full max-w-4xl mx-auto">
       <div className="mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold dark:text-white text-gray-900 tracking-tighter mb-1">Create Curator Scaler</h2>
+        <h2 className="text-2xl md:text-3xl font-bold dark:text-white text-gray-900 tracking-tighter mb-1">Create Curator-Scaler</h2>
         <p className="dark:text-gray-500 text-gray-500 font-mono text-xs uppercase tracking-widest italic">Provision an intelligent autoscaling resource</p>
       </div>
 
@@ -533,7 +533,7 @@ export function CreateScaler({ onCreated }: CreateScalerProps) {
           ) : (
             <>
               <PlusCircle className="w-5 h-5 group-hover:rotate-90 transition-transform" />
-              INJECT CURATOR SCALER
+              INJECT CURATOR-SCALER
             </>
           )}
         </button>

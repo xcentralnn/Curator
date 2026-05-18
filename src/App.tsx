@@ -113,7 +113,7 @@ export default function App() {
                 
                 <div className="flex-col hidden lg:flex">
                   <span className="text-sm font-bold dark:text-gray-300 text-gray-700 dark:group-hover:text-white group-hover:text-gray-900 transition-colors leading-none truncate max-w-[120px]">{user.displayName || user.email?.split('@')[0]}</span>
-                  <span className="text-[10px] dark:text-gray-600 text-gray-500 font-mono">Curator Scaler Operator</span>
+                  <span className="text-[10px] dark:text-gray-600 text-gray-500 font-mono">Curator-Scaler Operator</span>
                 </div>
 
                 <div className="absolute right-0 top-full mt-2 w-48 dark:bg-curator-card bg-white border dark:border-curator-border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all pointer-events-none group-hover:pointer-events-auto p-2">

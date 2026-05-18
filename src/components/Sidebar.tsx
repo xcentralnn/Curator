@@ -1,5 +1,6 @@
 import { LayoutDashboard, Activity, Database, History, Settings, ShieldAlert, Coffee, PlusCircle, ChevronLeft, ChevronRight, Hexagon, Box, Shield, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { motion } from "motion/react";
 import { cn } from "../lib/utils";
 import { CuratorLogo } from "./VisualBrand";
 import { useAdvisor } from "../contexts/AdvisorContext";
@@ -25,9 +26,9 @@ export function Sidebar({ activePage, setActivePage, className, onClose }: Sideb
   ];
 
   const productItems = [
-    { id: "observability", label: "Curator Scaler Observability", icon: Hexagon, color: "text-purple-500 dark:text-purple-400" },
-    { id: "deployment", label: "Curator Scaler Deployment", icon: Box, color: "text-emerald-500 dark:text-emerald-400" },
-    { id: "security", label: "Curator Scaler Security", icon: Shield, color: "text-amber-500 dark:text-amber-400" },
+    { id: "observability", label: "Curator-Scaler Observability", icon: Hexagon, color: "text-purple-500 dark:text-purple-400" },
+    { id: "deployment", label: "Curator-Scaler Deployment", icon: Box, color: "text-emerald-500 dark:text-emerald-400" },
+    { id: "security", label: "Curator-Scaler Security", icon: Shield, color: "text-amber-500 dark:text-amber-400" },
   ];
 
   const handleMenuClick = (id: string, label: string) => {
@@ -55,7 +56,7 @@ export function Sidebar({ activePage, setActivePage, className, onClose }: Sideb
           </div>
           {!isCollapsed && (
             <div className="flex flex-col">
-              <h1 className="text-xl font-black tracking-tighter dark:text-white text-gray-900 transition-colors leading-none whitespace-nowrap">CURATOR SCALER</h1>
+              <h1 className="text-xl font-black tracking-tighter dark:text-white text-gray-900 transition-colors leading-none whitespace-nowrap">CURATOR-SCALER</h1>
               <span className="text-[9px] font-bold tracking-widest text-gray-400 dark:text-gray-500 mt-1 uppercase">Software</span>
             </div>
           )}
@@ -92,7 +93,7 @@ export function Sidebar({ activePage, setActivePage, className, onClose }: Sideb
         <div>
           {!isCollapsed && (
             <div className="px-3 mb-2">
-              <p className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap">CURATOR SCALER</p>
+              <p className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap">CURATOR-SCALER</p>
             </div>
           )}
           <nav className="space-y-1">
@@ -126,7 +127,7 @@ export function Sidebar({ activePage, setActivePage, className, onClose }: Sideb
               className="w-full flex items-center justify-between px-3 mb-2 group transition-colors focus:outline-none"
             >
               <p className="text-[10px] font-bold text-gray-500 dark:text-gray-500/80 uppercase tracking-widest group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors whitespace-nowrap truncate mr-2">
-                [CURATOR SCALER SYSTEM PRODUCTS]
+                [CURATOR-SCALER SYSTEM PRODUCTS]
               </p>
               <ChevronDown className={cn("w-3.5 h-3.5 text-gray-400 transition-transform duration-300 shrink-0", isProductsCollapsed && "-rotate-90")} />
             </button>
@@ -154,24 +155,68 @@ export function Sidebar({ activePage, setActivePage, className, onClose }: Sideb
       </div>
 
       {/* Mascot Insight Widget */}
-      <div className={cn("mt-auto mb-6 p-4 rounded-xl border dark:border-white/5 border-gray-100 relative group transition-all duration-300", 
-        isCollapsed ? "bg-transparent p-2 flex justify-center border-transparent" : "bg-gradient-to-br dark:from-curator-accent/10 dark:to-transparent from-curator-accent/5 to-transparent")}>
-        <div className={cn("flex flex-col items-start gap-2", isCollapsed ? "justify-center" : "")}>
+      <motion.div 
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className={cn("mt-auto mb-6 p-4 rounded-xl border dark:border-white/5 border-gray-100 relative group transition-all duration-300 cursor-pointer overflow-hidden z-10", 
+        isCollapsed ? "bg-transparent p-2 flex justify-center border-transparent" : "bg-gradient-to-br dark:from-curator-accent/5 dark:to-transparent from-[#f0f7fe] to-white dark:shadow-none shadow-sm")}
+      >
+        <div className={cn("flex flex-col items-start gap-2 relative z-10", isCollapsed ? "justify-center" : "")}>
           {isCollapsed ? (
-            <Coffee className="w-5 h-5 text-curator-accent opacity-50" />
+            <motion.div whileHover={{ rotate: 15 }} transition={{ type: "spring", stiffness: 300 }}>
+              <Coffee className="w-5 h-5 text-curator-accent opacity-60 group-hover:opacity-100 transition-opacity" />
+            </motion.div>
           ) : (
-            <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold text-curator-accent uppercase tracking-widest mb-2 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-curator-accent inline-block"></span>
-                SYSTEM ADVISOR
-              </p>
-              <p className="text-[10px] dark:text-gray-400 text-gray-500 font-mono italic leading-relaxed">
-                "Predicted traffic looks stable. Grab a coffee, I'm monitoring the pods."
-              </p>
+            <div className="flex-1 min-w-0 w-full relative">
+              <div className="flex items-center justify-between mb-3 w-full">
+                <p className="text-[10px] font-bold text-[#1f6b95] dark:text-curator-accent uppercase tracking-widest flex items-center gap-2">
+                  <motion.span 
+                    animate={{ opacity: [1, 0.4, 1] }} 
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    className="w-1.5 h-1.5 rounded-full bg-[#1f6b95] dark:bg-curator-accent inline-block shadow-[0_0_8px_rgba(31,107,149,0.6)] dark:shadow-[0_0_8px_rgba(52,152,219,0.8)]"
+                  ></motion.span>
+                  SYSTEM ADVISOR
+                </p>
+                <motion.span 
+                  whileHover={{ scale: 1.05, backgroundColor: "rgba(52, 152, 219, 0.3)" }}
+                  className="text-[9px] font-bold bg-[#e3f0FA] dark:bg-curator-accent/20 text-[#1f6b95] dark:text-curator-accent px-1.5 py-0.5 rounded uppercase border border-[#b7dcf8] dark:border-curator-accent/30 shadow-sm transition-colors cursor-help"
+                >
+                  PROD
+                </motion.span>
+              </div>
+              <motion.div
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="relative"
+              >
+                <p className="text-[11px] text-[#334155] dark:text-gray-300 font-mono italic leading-relaxed pr-6 relative z-10">
+                  "Predicted traffic looks stable. Grab a coffee, I'm monitoring the pods."
+                </p>
+              </motion.div>
             </div>
           )}
         </div>
-      </div>
+        
+        {!isCollapsed && (
+          <motion.div 
+            animate={{ y: [0, -3, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -bottom-4 -right-4 w-20 h-20 pointer-events-none z-0 opacity-90 group-hover:opacity-100 transition-opacity"
+          >
+             <img 
+               src="https://raw.githubusercontent.com/xcentralnn/Curator-Draft/main/docs/curator-logo.png" 
+               alt="System Advisor Mascot" 
+               className="w-full h-full object-cover transform translate-x-1 translate-y-2 group-hover:rotate-[-5deg] group-hover:-translate-y-1 transition-all duration-500 ease-out"
+               style={{
+                 objectPosition: "50% 50%",
+                 filter: "drop-shadow(-2px -2px 4px rgba(0,0,0,0.15))"
+               }}
+               referrerPolicy="no-referrer"
+             />
+          </motion.div>
+        )}
+      </motion.div>
 
       <div className="space-y-1">
         <button 

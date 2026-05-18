@@ -37,7 +37,7 @@ export function ScalersInventory() {
           </div>
           <h2 className="text-2xl font-bold dark:text-white text-gray-900 tracking-tight mb-3">No Scalers Found</h2>
           <p className="dark:text-gray-400 text-gray-500 text-sm mb-8">
-            You haven't provisioned any Curator Scalers in this cluster yet. Create one to let ML take over your scaling logic.
+            You haven't provisioned any Curator-Scalers in this cluster yet. Create one to let ML take over your scaling logic.
           </p>
           <button className="flex items-center justify-center gap-2 w-full bg-curator-accent text-white px-5 py-3 rounded-lg font-bold text-sm hover:bg-curator-accent/90 transition-colors">
             <Plus className="w-4 h-4" />
@@ -53,7 +53,7 @@ export function ScalersInventory() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-10">
         <div>
           <h2 className="text-2xl md:text-3xl font-bold dark:text-white text-gray-900 tracking-tighter mb-1">Scalers Inventory</h2>
-          <p className="dark:text-gray-500 text-gray-400 font-mono text-[10px] md:text-xs uppercase tracking-widest italic">Curator Scaler v1 Managed Resources</p>
+          <p className="dark:text-gray-500 text-gray-400 font-mono text-[10px] md:text-xs uppercase tracking-widest italic">Curator-Scaler v1 Managed Resources</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 dark:bg-curator-card bg-white border dark:border-curator-border border-gray-200 rounded-lg px-3 py-1.5 w-full md:w-64">

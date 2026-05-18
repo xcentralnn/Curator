@@ -17,7 +17,7 @@ export function FloatingMascot() {
         "Welcome back! I'm monitoring the cluster.",
         "All systems are running smoothly right now.",
         "Need to scale up? Just let me know!",
-        "Curator Scaler ML Engine is online and vigilant.",
+        "Curator-Scaler ML Engine is online and vigilant.",
         "Analyzing real-time metrics... looks good!"
       ];
       const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
@@ -149,7 +149,7 @@ export function FloatingMascot() {
                </svg>
             </div>
 
-            <span className="font-bold text-[10px] text-gray-900 dark:text-white tracking-widest uppercase whitespace-nowrap">Curator Scaler</span>
+            <span className="font-bold text-[10px] text-gray-900 dark:text-white tracking-widest uppercase whitespace-nowrap">Curator-Scaler</span>
           </div>
 
           {/* Glow effect when active */}
